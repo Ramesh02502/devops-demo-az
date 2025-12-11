@@ -1,0 +1,83 @@
+---02_pod
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - name: nginx
+    image: DOCKERHUB_USERNAME/helloworld-demo-python:v1
+    ports:
+    - containerPort: 8080
+
+
+
+ 01_pod 
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.14.2
+    ports:
+    - containerPort: 80
+
+pods2.yaml - deploymnet 
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 3 # Desired number of NGINX pods
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2 # Use a specific NGINX image version
+        ports:
+        - containerPort: 80
+
+CM ----
+
+
+ubuntu@ip-172-31-30-90:~$ cat cm.yml 
+  
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: myconfigmap
+data:
+  username: k8s-admin
+  access_level: "1"
+
+service ----
+
+
+ubuntu@ip-172-31-30-90:~$ cat service.yml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  type: NodePort
+  selector:
+    app: nginx
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30007
+
+ubuntu@ip-172-31-30-90:~$ 
+
